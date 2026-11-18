@@ -1,66 +1,81 @@
-// الإيميلات المسموح لها بإضافة المشاريع
-const allowedEmails = [
-"admin@gmail.com",
-"teacher@gmail.com",
-"student@gmail.com"
-];
+// إعداد Appwrite
+const client = new Appwrite.Client();
 
-// التحقق من الإيميل
-function isAllowed(email) {
-return allowedEmails.includes(
-email.trim().toLowerCase()
-);
+client
+.setEndpoint("https://fra.cloud.appwrite.io/v1")
+.setProject("6afdd0d200116344a36e");
+
+const account = new Appwrite.Account(client);
+
+// التحقق من تسجيل الدخول
+async function isLoggedIn() {
+try {
+const user = await account.get();
+
+    return user.email.toLowerCase() === "teacher@gmail.com";
+
+} catch (error) {
+    return false;
 }
-
-// تسجيل الدخول
-function loginWithEmail(email) {
-email = email.trim().toLowerCase();
-
-if (isAllowed(email)) {
-    localStorage.setItem("authorizedEmail", email);
-    return true;
-}
-
-return false;
 
 }
 
-// التحقق من المستخدم الحالي
-function isLoggedIn() {
-const email = localStorage.getItem("authorizedEmail");
-
-return !!email && isAllowed(email);
-
+// الحصول على المستخدم الحالي
+async function getCurrentUser() {
+try {
+return await account.get();
+} catch (error) {
+return null;
+}
 }
 
 // تسجيل الخروج
-function logout() {
-localStorage.removeItem("authorizedEmail");
-location.href = "login.html";
+async function logout() {
+try {
+await account.deleteSession({
+sessionId: "current"
+});
+} catch (error) {
+console.error(error);
 }
 
-// ربط زر الإضافة
-document.addEventListener("DOMContentLoaded", function() {
+location.href = "login.html";
+
+}
+
+// حماية صفحة الإضافة
+document.addEventListener("DOMContentLoaded", async function() {
 
 const page = location.pathname.toLowerCase();
 const currentPage = page.split("/").pop();
 
-// منع الدخول لصفحة الإضافة بدون تسجيل الدخول
-if (currentPage === "add.html" && !isLoggedIn()) {
-    location.replace("login.html");
-    return;
+if (currentPage === "add.html") {
+
+    const loggedIn = await isLoggedIn();
+
+    if (!loggedIn) {
+        location.replace("login.html");
+        return;
+    }
 }
 
 const addButton = document.getElementById("addButton");
 
 if (addButton) {
-    if (isLoggedIn()) {
+
+    const loggedIn = await isLoggedIn();
+
+    if (loggedIn) {
         addButton.textContent = "إضافة مشروع";
+
         addButton.onclick = function() {
             location.href = "add.html";
         };
+
     } else {
+
         addButton.textContent = "تسجيل الدخول للإضافة";
+
         addButton.onclick = function() {
             location.href = "login.html";
         };
