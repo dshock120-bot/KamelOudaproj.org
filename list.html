@@ -111,9 +111,7 @@ oninput="showProjects()"
     <option value="قرآن كريم">قرآن كريم</option>
     <option value="دراسات اجتماعية">دراسات اجتماعية</option>
     <option value="تربية فنية">تربية فنية</option>
-</select>
-
-<select id="grade" onchange="showProjects()">
+</select><select id="grade" onchange="showProjects()">
     <option value="">كل الصفوف</option>
     <option value="الصف الأول الابتدائي">الأول الابتدائي</option>
     <option value="الصف الثاني الابتدائي">الثاني الابتدائي</option>
@@ -127,9 +125,8 @@ oninput="showProjects()"
     <option value="الصف الأول الثانوي">الأول الثانوي</option>
     <option value="الصف الثاني الثانوي">الثاني الثانوي</option>
     <option value="الصف الثالث الثانوي">الثالث الثانوي</option>
-</select>
+</select></div><div id="projects"></div><!-- تحميل مكتبة Appwrite أولاً --><script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script><!-- ثم تحميل ملف تسجيل الدخول --><script src="auth.js"></script><script>
 
-</div><div id="projects"></div><script src="auth.js"></script><script>
 // قراءة المشاريع
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 
@@ -214,5 +211,6 @@ function escapeHTML(value) {
 }
 
 showProjects();
+
 </script></body>
 </html>
