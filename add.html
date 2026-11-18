@@ -1,8 +1,9 @@
 <!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إنشاء مشروع جديد</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0"><title>إنشاء مشروع جديد</title><style>
 body {
   background-color: #d9e8fa;
   font-family: Arial;
@@ -99,7 +100,8 @@ label {
 <button id="createButton" onclick="saveProject()">إنشاء المشروع</button>
 <button onclick="location.href='list.html'">رجوع</button>
 
-</div><script src="auth.js"></script><script>
+</div><script src="auth.js?v=20261118-2"></script><script>
+
 const client = new Appwrite.Client();
 
 client
@@ -117,7 +119,6 @@ async function saveProject() {
 
   const button = document.getElementById("createButton");
 
-  // التحقق من جلسة Appwrite
   if (!(await isLoggedIn())) {
     alert("يجب تسجيل الدخول أولاً");
     location.href = "login.html";
@@ -148,23 +149,19 @@ async function saveProject() {
 
   try {
 
-    // رفع الصورة
     uploadedFile = await storage.createFile({
       bucketId: BUCKET_ID,
       fileId: Appwrite.ID.unique(),
       file: image
     });
 
-    // رابط الصورة
     const imageUrl = storage.getFileView({
       bucketId: BUCKET_ID,
       fileId: uploadedFile.$id
     });
 
-    // تحويل التاريخ إلى DateTime
     const projectDate = new Date(date + "T00:00:00").toISOString();
 
-    // إنشاء صف المشروع
     await tablesDB.createRow({
       databaseId: DATABASE_ID,
       tableId: TABLE_ID,
@@ -203,5 +200,6 @@ async function saveProject() {
     button.textContent = "إنشاء المشروع";
   }
 }
+
 </script></body>
 </html>
