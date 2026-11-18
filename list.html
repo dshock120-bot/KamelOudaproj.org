@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قائمة المشاريع</title><style>
+body {
+    margin: 0;
+    padding: 15px;
+    font-family: Arial, sans-serif;
+    background: #d9e8fa;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+h2 {
+    color: #287A38;
+    margin: 0;
+}
+
+button {
+    background: #287A38;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.search-box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    font-size: 17px;
+    margin-bottom: 12px;
+    outline: none;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+select {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 7px;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+}
+
+.project {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px #00000015;
+}
+
+.project img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.project h3 {
+    color: #287A38;
+    margin-bottom: 8px;
+}
+
+.project p {
+    margin: 6px 0;
+}
+
+.empty {
+    text-align: center;
+    color: #555;
+    margin-top: 25px;
+}
+</style></head><body><header>
+    <h2>قائمة المشاريع</h2>
+    <button id="addButton">تسجيل الدخول للإضافة</button>
+</header><input
+type="search"
+id="search"
+class="search-box"
+placeholder="ابحث عن مشروع أو اسم المنشئ..."
+oninput="showProjects()"
+
+«»
+
+<div class="filters"><select id="category" onchange="showProjects()">
+    <option value="">كل المواد</option>
+    <option value="لغة عربية">لغة عربية</option>
+    <option value="رياضيات">رياضيات</option>
+    <option value="علوم">علوم</option>
+    <option value="إنجليزي">إنجليزي</option>
+    <option value="قرآن كريم">قرآن كريم</option>
+    <option value="دراسات اجتماعية">دراسات اجتماعية</option>
+    <option value="تربية فنية">تربية فنية</option>
+</select>
+
+<select id="grade" onchange="showProjects()">
+    <option value="">كل الصفوف</option>
+    <option value="الصف الأول الابتدائي">الأول الابتدائي</option>
+    <option value="الصف الثاني الابتدائي">الثاني الابتدائي</option>
+    <option value="الصف الثالث الابتدائي">الثالث الابتدائي</option>
+    <option value="الصف الرابع الابتدائي">الرابع الابتدائي</option>
+    <option value="الصف الخامس الابتدائي">الخامس الابتدائي</option>
+    <option value="الصف السادس الابتدائي">السادس الابتدائي</option>
+    <option value="الصف الأول الإعدادي">الأول الإعدادي</option>
+    <option value="الصف الثاني الإعدادي">الثاني الإعدادي</option>
+    <option value="الصف الثالث الإعدادي">الثالث الإعدادي</option>
+    <option value="الصف الأول الثانوي">الأول الثانوي</option>
+    <option value="الصف الثاني الثانوي">الثاني الثانوي</option>
+    <option value="الصف الثالث الثانوي">الثالث الثانوي</option>
+</select>
+
+</div><div id="projects"></div><script src="auth.js"></script><script>
+// قراءة المشاريع
+let projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+// إصلاح المشاريع القديمة التي لا تحتوي على ID
+let changed = false;
+
+projects.forEach(project => {
+    if (!project.id) {
+        project.id = Date.now().toString() +
+        Math.random().toString(36).slice(2);
+        changed = true;
+    }
+});
+
+if (changed) {
+    localStorage.setItem("projects", JSON.stringify(projects));
+}
+
+// عرض المشاريع
+function showProjects() {
+
+    let search = document.getElementById("search").value.toLowerCase();
+    let category = document.getElementById("category").value;
+    let grade = document.getElementById("grade").value;
+
+    let container = document.getElementById("projects");
+    container.innerHTML = "";
+
+    let filtered = projects.filter(project => {
+
+        let name = (project.name || "").toLowerCase();
+        let creator = (project.creator || "").toLowerCase();
+
+        return (
+            (name.includes(search) || creator.includes(search)) &&
+            (!category || project.category === category) &&
+            (!grade || project.grade === grade)
+        );
+    });
+
+    if (filtered.length === 0) {
+        container.innerHTML =
+        '<p class="empty">لا توجد مشاريع مطابقة.</p>';
+        return;
+    }
+
+    filtered.forEach(project => {
+
+        let card = document.createElement("div");
+        card.className = "project";
+
+        let image = project.image
+            ? `<img src="${project.image}" alt="صورة المشروع">`
+            : "";
+
+        card.innerHTML = `
+            ${image}
+            <h3>${escapeHTML(project.name || "")}</h3>
+            <p>المنشئ: ${escapeHTML(project.creator || "غير محدد")}</p>
+            <p>المادة: ${escapeHTML(project.category || "غير محددة")}</p>
+            <p>الصف: ${escapeHTML(project.grade || "غير محدد")}</p>
+        `;
+
+        card.onclick = function() {
+            location.href = "project.html?id=" +
+            encodeURIComponent(project.id);
+        };
+
+        container.appendChild(card);
+    });
+}
+
+// حماية النصوص المعروضة
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[char]);
+}
+
+showProjects();
+</script></body>
+</html>

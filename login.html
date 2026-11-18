@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>تسجيل الدخول</title>
+
+<style>
+body {
+    background: #d9e8fa;
+    font-family: Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    margin: 0;
+}
+
+.box {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 85%;
+    max-width: 350px;
+    text-align: center;
+}
+
+h2 {
+    color: #287A38;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px;
+    margin: 15px 0;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    background: #287A38;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+#error {
+    color: red;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>تسجيل الدخول</h2>
+
+<p>أدخل بريدك الإلكتروني للمتابعة</p>
+
+<form id="loginForm">
+
+<input
+    type="email"
+    id="email"
+    placeholder="البريد الإلكتروني"
+    required
+>
+
+<button type="submit">دخول</button>
+
+</form>
+
+<p id="error"></p>
+
+</div>
+
+<script src="auth.js"></script>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    if (loginWithEmail(email)) {
+        location.href = "add.html";
+    } else {
+        document.getElementById("error").textContent =
+            "هذا البريد الإلكتروني غير مسموح له بالدخول.";
+    }
+});
+</script>
+
+</body>
+</html>
