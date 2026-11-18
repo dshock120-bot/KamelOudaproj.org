@@ -1,8 +1,9 @@
 <!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قائمة المشاريع</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0"><title>قائمة المشاريع</title><style>
 body {
     margin: 0;
     padding: 15px;
@@ -125,7 +126,7 @@ oninput="showProjects()"
     <option value="الصف الأول الثانوي">الأول الثانوي</option>
     <option value="الصف الثاني الثانوي">الثاني الثانوي</option>
     <option value="الصف الثالث الثانوي">الثالث الثانوي</option>
-</select></div><div id="projects"></div><!-- تحميل مكتبة Appwrite أولاً --><script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script><!-- ثم تحميل ملف تسجيل الدخول --><script src="auth.js"></script><script>
+</select></div><div id="projects"></div><!-- تحميل مكتبة Appwrite --><script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script><!-- تحميل ملف تسجيل الدخول برقم إصدار --><script src="auth.js?v=20261118-2"></script><script>
 
 // قراءة المشاريع
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
