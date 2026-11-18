@@ -1,59 +1,77 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0"><title>إنشاء مشروع جديد</title><style>
+<meta http-equiv="Expires" content="0">
+
+<title>إنشاء مشروع جديد</title>
+
+<style>
 body {
-  background-color: #d9e8fa;
-  font-family: Arial;
-  text-align: center;
+    background-color: #d9e8fa;
+    font-family: Arial;
+    text-align: center;
 }
 
 .container {
-  background: white;
-  width: 90%;
-  max-width: 400px;
-  margin: 35px auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-sizing: border-box;
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    margin: 35px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-sizing: border-box;
 }
 
 input, select {
-  width: 100%;
-  height: 42px;
-  margin: 10px 0;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+    width: 100%;
+    height: 42px;
+    margin: 10px 0;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
 }
 
 button {
-  background: #287A38;
-  color: white;
-  width: 120px;
-  height: 42px;
-  border: none;
-  border-radius: 6px;
-  margin: 5px;
+    background: #287A38;
+    color: white;
+    width: 120px;
+    height: 42px;
+    border: none;
+    border-radius: 6px;
+    margin: 5px;
+    cursor: pointer;
 }
 
 button:disabled {
-  opacity: 0.6;
+    opacity: 0.6;
 }
 
 h2 {
-  color: #287A38;
+    color: #287A38;
 }
 
 label {
-  display: block;
-  text-align: right;
-  margin-top: 12px;
+    display: block;
+    text-align: right;
+    margin-top: 12px;
 }
-</style><script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script></head><body><div class="container"><h2>إنشاء مشروع جديد</h2><label>اسم المشروع</label>
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>إنشاء مشروع جديد</h2>
+
+<label>اسم المشروع</label>
 <input id="projectName" placeholder="اسم المشروع">
 
 <label>اسم المنشئ</label>
@@ -61,145 +79,181 @@ label {
 
 <label>الفئة الرئيسية (المادة)</label>
 <select id="category">
+    <option value="">اختر المادة</option>
+    <option>لغة عربية</option>
+    <option>رياضيات</option>
+    <option>علوم</option>
+    <option>إنجليزي</option>
+    <option>قرآن كريم</option>
+    <option>دراسات اجتماعية</option>
+    <option>تربية فنية</option>
+</select>
 
-<option value="">اختر المادة</option>
-<option>لغة عربية</option>
-<option>رياضيات</option>
-<option>علوم</option>
-<option>إنجليزي</option>
-<option>قرآن كريم</option>
-<option>دراسات اجتماعية</option>
-<option>تربية فنية</option>
-</select><label>الفئة الفرعية (الصف الدراسي)</label>
+<label>الفئة الفرعية (الصف الدراسي)</label>
 <select id="grade">
+    <option value="">اختر الصف الدراسي</option>
 
-<option value="">اختر الصف الدراسي</option><optgroup label="المرحلة الابتدائية">
-<option>الصف الأول الابتدائي</option>
-<option>الصف الثاني الابتدائي</option>
-<option>الصف الثالث الابتدائي</option>
-<option>الصف الرابع الابتدائي</option>
-<option>الصف الخامس الابتدائي</option>
-<option>الصف السادس الابتدائي</option>
-</optgroup><optgroup label="المرحلة الإعدادية">
-<option>الصف الأول الإعدادي</option>
-<option>الصف الثاني الإعدادي</option>
-<option>الصف الثالث الإعدادي</option>
-</optgroup><optgroup label="المرحلة الثانوية">
-<option>الصف الأول الثانوي</option>
-<option>الصف الثاني الثانوي</option>
-<option>الصف الثالث الثانوي</option>
-</optgroup>
-</select><label>تاريخ العمل</label>
+    <optgroup label="المرحلة الابتدائية">
+        <option>الصف الأول الابتدائي</option>
+        <option>الصف الثاني الابتدائي</option>
+        <option>الصف الثالث الابتدائي</option>
+        <option>الصف الرابع الابتدائي</option>
+        <option>الصف الخامس الابتدائي</option>
+        <option>الصف السادس الابتدائي</option>
+    </optgroup>
+
+    <optgroup label="المرحلة الإعدادية">
+        <option>الصف الأول الإعدادي</option>
+        <option>الصف الثاني الإعدادي</option>
+        <option>الصف الثالث الإعدادي</option>
+    </optgroup>
+
+    <optgroup label="المرحلة الثانوية">
+        <option>الصف الأول الثانوي</option>
+        <option>الصف الثاني الثانوي</option>
+        <option>الصف الثالث الثانوي</option>
+    </optgroup>
+</select>
+
+<label>تاريخ العمل</label>
 <input type="date" id="workDate">
 
 <label>صورة المشروع</label>
-<input type="file" id="projectImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+<input
+    type="file"
+    id="projectImage"
+    accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+>
 
 <br><br>
 
-<button id="createButton" onclick="saveProject()">إنشاء المشروع</button>
-<button onclick="location.href='list.html'">رجوع</button>
+<button id="createButton" type="button" onclick="saveProject()">
+    إنشاء المشروع
+</button>
 
-</div><script src="auth.js?v=20261118-3"></script>
+<button type="button" onclick="location.href='list.html'">
+    رجوع
+</button>
+
+</div>
+
+<script src="auth.js?v=20261118-4"></script>
+
 <script>
+
+// إعداد Appwrite
 const client = new Appwrite.Client();
 
 client
-  .setEndpoint("https://fra.cloud.appwrite.io/v1")
-  .setProject("6afdd0d200116344a36e");
+.setEndpoint("https://fra.cloud.appwrite.io/v1")
+.setProject("6afdd0d200116344a36e");
 
 const tablesDB = new Appwrite.TablesDB(client);
 const storage = new Appwrite.Storage(client);
 
+// بيانات قاعدة البيانات
 const DATABASE_ID = "6afdd419002061d1ceef";
 const TABLE_ID = "6afdd4610022a0ea1d6f";
 const BUCKET_ID = "6afdd6eb002b777e7c31";
 
+// إنشاء المشروع
 async function saveProject() {
 
-  const button = document.getElementById("createButton");
+    const button = document.getElementById("createButton");
 
-  if (!(await isLoggedIn())) {
-    alert("يجب تسجيل الدخول أولاً");
-    location.href = "login.html";
-    return;
-  }
-
-  const name = document.getElementById("projectName").value.trim();
-  const creator = document.getElementById("creatorName").value.trim();
-  const category = document.getElementById("category").value;
-  const grade = document.getElementById("grade").value;
-  const date = document.getElementById("workDate").value;
-  const image = document.getElementById("projectImage").files[0];
-
-  if (!name || !creator || !category || !grade || !date || !image) {
-    alert("من فضلك أكمل جميع البيانات");
-    return;
-  }
-
-  if (!["image/jpeg", "image/png"].includes(image.type)) {
-    alert("من فضلك اختر صورة JPG أو PNG فقط");
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = "جارٍ الحفظ...";
-
-  let uploadedFile = null;
-
-  try {
-
-    uploadedFile = await storage.createFile({
-      bucketId: BUCKET_ID,
-      fileId: Appwrite.ID.unique(),
-      file: image
-    });
-
-    const imageUrl = storage.getFileView({
-      bucketId: BUCKET_ID,
-      fileId: uploadedFile.$id
-    });
-
-    const projectDate = new Date(date + "T00:00:00").toISOString();
-
-    await tablesDB.createRow({
-      databaseId: DATABASE_ID,
-      tableId: TABLE_ID,
-      rowId: Appwrite.ID.unique(),
-      data: {
-        projectName: name,
-        creatorName: creator,
-        subject: category,
-        grade: grade,
-        projectDate: projectDate,
-        imageUrl: imageUrl
-      }
-    });
-
-    alert("تم إنشاء المشروع بنجاح!");
-    location.href = "list.html";
-
-  } catch (error) {
-
-    console.error("Appwrite Error:", error);
-
-    if (uploadedFile) {
-      try {
-        await storage.deleteFile({
-          bucketId: BUCKET_ID,
-          fileId: uploadedFile.$id
-        });
-      } catch (deleteError) {
-        console.error("File cleanup error:", deleteError);
-      }
+    if (!(await isLoggedIn())) {
+        alert("يجب تسجيل الدخول أولاً");
+        location.href = "login.html";
+        return;
     }
 
-    alert("حدث خطأ أثناء الحفظ: " + (error.message || "خطأ غير معروف"));
+    const name = document.getElementById("projectName").value.trim();
+    const creator = document.getElementById("creatorName").value.trim();
+    const category = document.getElementById("category").value;
+    const grade = document.getElementById("grade").value;
+    const date = document.getElementById("workDate").value;
+    const image = document.getElementById("projectImage").files[0];
 
-    button.disabled = false;
-    button.textContent = "إنشاء المشروع";
-  }
+    if (!name || !creator || !category || !grade || !date || !image) {
+        alert("من فضلك أكمل جميع البيانات");
+        return;
+    }
+
+    if (!["image/jpeg", "image/png"].includes(image.type)) {
+        alert("من فضلك اختر صورة JPG أو PNG فقط");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "جارٍ الحفظ...";
+
+    let uploadedFile = null;
+
+    try {
+
+        // رفع الصورة
+        uploadedFile = await storage.createFile({
+            bucketId: BUCKET_ID,
+            fileId: Appwrite.ID.unique(),
+            file: image
+        });
+
+        // رابط الصورة
+        const imageUrl = String(storage.getFileView({
+            bucketId: BUCKET_ID,
+            fileId: uploadedFile.$id
+        }));
+
+        // تحويل التاريخ
+        const projectDate = new Date(date + "T00:00:00").toISOString();
+
+        // حفظ بيانات المشروع
+        await tablesDB.createRow({
+            databaseId: DATABASE_ID,
+            tableId: TABLE_ID,
+            rowId: Appwrite.ID.unique(),
+
+            data: {
+                projectName: name,
+                creatorName: creator,
+                subject: category,
+                grade: grade,
+                projectDate: projectDate,
+                imageUrl: imageUrl
+            }
+        });
+
+        alert("تم إنشاء المشروع بنجاح!");
+
+        location.href = "list.html";
+
+    } catch (error) {
+
+        console.error("Appwrite Error:", error);
+
+        // حذف الصورة إذا فشل حفظ بيانات المشروع
+        if (uploadedFile) {
+            try {
+                await storage.deleteFile({
+                    bucketId: BUCKET_ID,
+                    fileId: uploadedFile.$id
+                });
+            } catch (deleteError) {
+                console.error(deleteError);
+            }
+        }
+
+        alert(
+            "حدث خطأ أثناء الحفظ: " +
+            (error.message || "خطأ غير معروف")
+        );
+
+        button.disabled = false;
+        button.textContent = "إنشاء المشروع";
+    }
 }
 
-</script></body>
+</script>
+
+</body>
 </html>
