@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+
 <title>قائمة المشاريع</title>
 
 <style>
@@ -98,11 +100,14 @@ select {
 }
 </style>
 </head>
+
 <body>
 
 <header>
     <h2>قائمة المشاريع</h2>
-    <button id="addButton" type="button">تسجيل الدخول للإضافة</button>
+    <button id="addButton" type="button">
+        تسجيل الدخول للإضافة
+    </button>
 </header>
 
 <input
@@ -143,107 +148,167 @@ select {
 
 </div>
 
-<div id="projects"></div>
+<div id="projects">
+    <p class="empty">جاري تحميل المشاريع...</p>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script>
-<script src="auth.js?v=20261118-3"></script>
+<script src="auth.js?v=20261118-4"></script>
+
 <script>
-// قراءة المشاريع
-let projects = [];
+(async function() {
 
-try {
-    projects = JSON.parse(localStorage.getItem("projects") || "[]");
-    if (!Array.isArray(projects)) projects = [];
-} catch (error) {
-    console.error(error);
-    projects = [];
-}
+    const ENDPOINT = "https://fra.cloud.appwrite.io/v1";
+    const PROJECT_ID = "6afdd0d200116344a36e";
+    const DATABASE_ID = "6afdd419002061d1ceef";
+    const TABLE_ID = "6afdd4610022a0ea1d6f";
 
-// إصلاح المشاريع القديمة التي لا تحتوي على ID
-let changed = false;
+    const client = new Appwrite.Client();
 
-projects.forEach(project => {
-    if (!project.id) {
-        project.id = Date.now().toString() +
-            Math.random().toString(36).slice(2);
-        changed = true;
-    }
-});
+    client
+        .setEndpoint(ENDPOINT)
+        .setProject(PROJECT_ID);
 
-if (changed) {
-    localStorage.setItem("projects", JSON.stringify(projects));
-}
+    const tablesDB = new Appwrite.TablesDB(client);
 
-// عرض المشاريع
-function showProjects() {
-    const search = document.getElementById("search").value.trim().toLowerCase();
-    const category = document.getElementById("category").value;
-    const grade = document.getElementById("grade").value;
+    let projects = [];
+
     const container = document.getElementById("projects");
 
-    container.innerHTML = "";
+    // تحميل المشاريع من Appwrite
+    async function loadProjects() {
 
-    const filtered = projects.filter(project => {
-        const name = String(project.name || "").toLowerCase();
-        const creator = String(project.creator || "").toLowerCase();
+        container.innerHTML =
+            '<p class="empty">جاري تحميل المشاريع...</p>';
 
-        return (
-            (name.includes(search) || creator.includes(search)) &&
-            (!category || project.category === category) &&
-            (!grade || project.grade === grade)
-        );
-    });
+        try {
 
-    if (filtered.length === 0) {
-        const empty = document.createElement("p");
-        empty.className = "empty";
-        empty.textContent = "لا توجد مشاريع مطابقة.";
-        container.appendChild(empty);
-        return;
+            const response = await tablesDB.listRows({
+                databaseId: DATABASE_ID,
+                tableId: TABLE_ID,
+                queries: [
+                    Appwrite.Query.limit(100)
+                ]
+            });
+
+            projects = response.rows || [];
+
+            showProjects();
+
+        } catch (error) {
+
+            console.error("Appwrite Error:", error);
+
+            container.innerHTML = "";
+
+            const message = document.createElement("p");
+            message.className = "empty";
+            message.textContent =
+                "تعذر تحميل المشاريع. تأكد من صلاحيات القراءة وإعدادات Appwrite.";
+
+            container.appendChild(message);
+        }
     }
 
-    filtered.forEach(project => {
-        const card = document.createElement("div");
-        card.className = "project";
+    // عرض المشاريع
+    function showProjects() {
 
-        if (project.image) {
-            const image = document.createElement("img");
-            image.src = project.image;
-            image.alt = "صورة المشروع";
-            card.appendChild(image);
-        }
+        const search = document
+            .getElementById("search")
+            .value.trim()
+            .toLowerCase();
 
-        const title = document.createElement("h3");
-        title.textContent = project.name || "بدون اسم";
-        card.appendChild(title);
+        const category = document.getElementById("category").value;
+        const grade = document.getElementById("grade").value;
 
-        const creator = document.createElement("p");
-        creator.textContent = "المنشئ: " + (project.creator || "غير محدد");
-        card.appendChild(creator);
+        container.innerHTML = "";
 
-        const subject = document.createElement("p");
-        subject.textContent = "المادة: " + (project.category || "غير محددة");
-        card.appendChild(subject);
+        const filtered = projects.filter(project => {
 
-        const gradeText = document.createElement("p");
-        gradeText.textContent = "الصف: " + (project.grade || "غير محدد");
-        card.appendChild(gradeText);
+            const name = String(project.projectName || "").toLowerCase();
+            const creator = String(project.creatorName || "").toLowerCase();
 
-        card.addEventListener("click", function() {
-            location.href = "project.html?id=" + encodeURIComponent(project.id);
+            return (
+                (name.includes(search) || creator.includes(search)) &&
+                (!category || project.subject === category) &&
+                (!grade || project.grade === grade)
+            );
         });
 
-        container.appendChild(card);
-    });
-}
+        if (filtered.length === 0) {
 
-// البحث والفلاتر
-document.getElementById("search").addEventListener("input", showProjects);
-document.getElementById("category").addEventListener("change", showProjects);
-document.getElementById("grade").addEventListener("change", showProjects);
+            const empty = document.createElement("p");
+            empty.className = "empty";
+            empty.textContent = "لا توجد مشاريع مطابقة.";
 
-showProjects();
+            container.appendChild(empty);
+            return;
+        }
+
+        filtered.forEach(project => {
+
+            const card = document.createElement("div");
+            card.className = "project";
+
+            if (project.imageUrl) {
+
+                const image = document.createElement("img");
+
+                image.src = project.imageUrl;
+                image.alt = "صورة المشروع";
+
+                card.appendChild(image);
+            }
+
+            const title = document.createElement("h3");
+            title.textContent = project.projectName || "بدون اسم";
+
+            card.appendChild(title);
+
+            const creator = document.createElement("p");
+            creator.textContent =
+                "المنشئ: " + (project.creatorName || "غير محدد");
+
+            card.appendChild(creator);
+
+            const subject = document.createElement("p");
+            subject.textContent =
+                "المادة: " + (project.subject || "غير محددة");
+
+            card.appendChild(subject);
+
+            const gradeText = document.createElement("p");
+            gradeText.textContent =
+                "الصف: " + (project.grade || "غير محدد");
+
+            card.appendChild(gradeText);
+
+            card.addEventListener("click", function() {
+
+                location.href =
+                    "project.html?id=" + encodeURIComponent(project.$id);
+
+            });
+
+            container.appendChild(card);
+        });
+    }
+
+    // البحث والفلاتر
+    document.getElementById("search")
+        .addEventListener("input", showProjects);
+
+    document.getElementById("category")
+        .addEventListener("change", showProjects);
+
+    document.getElementById("grade")
+        .addEventListener("change", showProjects);
+
+    // بدء التحميل
+    await loadProjects();
+
+})();
 </script>
 
 </body>
-</html>
+    </html>
