@@ -124,8 +124,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     } catch (err) {
         console.error(err);
 
-        error.textContent = "فشل تسجيل الدخول. تأكد من البريد الإلكتروني وكلمة المرور.";
-
+        error.textContent = "خطأ: " + err.message;
         button.disabled = false;
         button.textContent = "دخول";
     }
