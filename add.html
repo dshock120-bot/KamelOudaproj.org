@@ -39,6 +39,10 @@ button {
   margin: 5px;
 }
 
+button:disabled {
+  opacity: 0.6;
+}
+
 h2 {
   color: #287A38;
 }
@@ -83,7 +87,8 @@ label {
 <option>الصف الأول الثانوي</option>
 <option>الصف الثاني الثانوي</option>
 <option>الصف الثالث الثانوي</option>
-</optgroup></select><label>تاريخ العمل</label>
+</optgroup>
+</select><label>تاريخ العمل</label>
 <input type="date" id="workDate">
 
 <label>صورة المشروع</label>
@@ -92,11 +97,9 @@ label {
 <br><br>
 
 <button id="createButton" onclick="saveProject()">إنشاء المشروع</button>
-
 <button onclick="location.href='list.html'">رجوع</button>
 
 </div><script src="auth.js"></script><script>
-
 const client = new Appwrite.Client();
 
 client
@@ -110,22 +113,16 @@ const DATABASE_ID = "6afdd419002061d1ceef";
 const TABLE_ID = "6afdd4610022a0ea1d6f";
 const BUCKET_ID = "6afdd6eb002b777e7c31";
 
-// التأكد من تسجيل الدخول
-if (!isLoggedIn()) {
-  alert("يجب تسجيل الدخول أولاً");
-  location.href = "login.html";
-}
-
-// إنشاء المشروع
 async function saveProject() {
 
-  if (!isLoggedIn()) {
-    alert("غير مسموح لك بإضافة المشاريع");
+  const button = document.getElementById("createButton");
+
+  // التحقق من جلسة Appwrite
+  if (!(await isLoggedIn())) {
+    alert("يجب تسجيل الدخول أولاً");
     location.href = "login.html";
     return;
   }
-
-  const button = document.getElementById("createButton");
 
   const name = document.getElementById("projectName").value.trim();
   const creator = document.getElementById("creatorName").value.trim();
@@ -139,9 +136,7 @@ async function saveProject() {
     return;
   }
 
-  const allowedTypes = ["image/jpeg", "image/png"];
-
-  if (!allowedTypes.includes(image.type)) {
+  if (!["image/jpeg", "image/png"].includes(image.type)) {
     alert("من فضلك اختر صورة JPG أو PNG فقط");
     return;
   }
@@ -153,14 +148,14 @@ async function saveProject() {
 
   try {
 
-    // رفع الصورة إلى Appwrite Storage
+    // رفع الصورة
     uploadedFile = await storage.createFile({
       bucketId: BUCKET_ID,
       fileId: Appwrite.ID.unique(),
       file: image
     });
 
-    // إنشاء رابط الصورة
+    // رابط الصورة
     const imageUrl = storage.getFileView({
       bucketId: BUCKET_ID,
       fileId: uploadedFile.$id
@@ -169,7 +164,7 @@ async function saveProject() {
     // تحويل التاريخ إلى DateTime
     const projectDate = new Date(date + "T00:00:00").toISOString();
 
-    // حفظ بيانات المشروع في جدول Projects
+    // إنشاء صف المشروع
     await tablesDB.createRow({
       databaseId: DATABASE_ID,
       tableId: TABLE_ID,
@@ -185,14 +180,12 @@ async function saveProject() {
     });
 
     alert("تم إنشاء المشروع بنجاح!");
-
     location.href = "list.html";
 
   } catch (error) {
 
     console.error("Appwrite Error:", error);
 
-    // محاولة حذف الصورة إذا فشل حفظ بيانات المشروع
     if (uploadedFile) {
       try {
         await storage.deleteFile({
@@ -209,8 +202,6 @@ async function saveProject() {
     button.disabled = false;
     button.textContent = "إنشاء المشروع";
   }
-
 }
-
 </script></body>
 </html>
