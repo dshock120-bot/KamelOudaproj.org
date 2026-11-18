@@ -1,3 +1,5 @@
+// Auth System - Version 20261118-2
+
 // إعداد Appwrite
 const client = new Appwrite.Client();
 
@@ -11,13 +13,10 @@ const account = new Appwrite.Account(client);
 async function isLoggedIn() {
 try {
 const user = await account.get();
-
-    return user.email.toLowerCase() === "teacher@gmail.com";
-
+return user.email.toLowerCase() === "teacher@gmail.com";
 } catch (error) {
-    return false;
+return false;
 }
-
 }
 
 // الحصول على المستخدم الحالي
@@ -50,7 +49,6 @@ const page = location.pathname.toLowerCase();
 const currentPage = page.split("/").pop();
 
 if (currentPage === "add.html") {
-
     const loggedIn = await isLoggedIn();
 
     if (!loggedIn) {
@@ -62,7 +60,6 @@ if (currentPage === "add.html") {
 const addButton = document.getElementById("addButton");
 
 if (addButton) {
-
     const loggedIn = await isLoggedIn();
 
     if (loggedIn) {
@@ -73,7 +70,6 @@ if (addButton) {
         };
 
     } else {
-
         addButton.textContent = "تسجيل الدخول للإضافة";
 
         addButton.onclick = function() {
