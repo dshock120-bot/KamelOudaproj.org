@@ -1,7 +1,9 @@
-<html>
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-  <title>تفاصيل المشروع</title>  <style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">  <title>تفاصيل المشروع</title>  <style>
     body {
       background-color: #d9e8fa;
       font-family: Arial;
@@ -43,58 +45,63 @@
       border: none;
       border-radius: 6px;
     }
+  </style></head><body>  <div class="container">
+    <h2>تفاصيل المشروع</h2><div id="projectDetails"></div>
 
-  </style></head><body><div class="container">  <h2>تفاصيل المشروع</h2>  <div id="projectDetails"></div>  <br>  <button onclick="location.href='list.html'">
-    رجوع
-  </button></div><script>
+<br>
 
-let projects = JSON.parse(localStorage.getItem("projects")) || [];
+<button onclick="location.href='list.html'">
+  رجوع
+</button>
 
-let params = new URLSearchParams(location.search);
+  </div>  <script>
 
-let id = params.get("id");
+    let projects = JSON.parse(localStorage.getItem("projects")) || [];
 
-let project = projects.find(function(item) {
-  return item.id === id;
-});
+    let params = new URLSearchParams(location.search);
+    let id = params.get("id");
 
-let container = document.getElementById("projectDetails");
+    let project = projects.find(function(item) {
+      return item.id === id;
+    });
 
-if (project) {
+    let container = document.getElementById("projectDetails");
 
-  let img = document.createElement("img");
-  img.className = "projectImage";
-  img.src = project.image;
-  img.alt = project.name;
+    if (project) {
 
-  let title = document.createElement("h2");
-  title.textContent = project.name;
+      let img = document.createElement("img");
+      img.className = "projectImage";
+      img.src = project.image;
+      img.alt = project.name;
 
-  let creator = document.createElement("p");
-  creator.textContent = "اسم المنشئ: " + project.creator;
+      let title = document.createElement("h2");
+      title.textContent = project.name;
 
-  let category = document.createElement("p");
-  category.textContent = "الفئة: " + project.category;
+      let creator = document.createElement("p");
+      creator.textContent = "اسم المنشئ: " + project.creator;
 
-  let date = document.createElement("p");
-  date.textContent = "تاريخ العمل: " + (project.date || "غير محدد");
+      let category = document.createElement("p");
+      category.textContent = "الفئة: " + project.category;
 
-  let details = document.createElement("div");
-  details.className = "details";
+      let date = document.createElement("p");
+      date.textContent = "تاريخ العمل: " + (project.date || "غير محدد");
 
-  details.appendChild(creator);
-  details.appendChild(category);
-  details.appendChild(date);
+      let details = document.createElement("div");
+      details.className = "details";
 
-  container.appendChild(img);
-  container.appendChild(title);
-  container.appendChild(details);
+      details.appendChild(creator);
+      details.appendChild(category);
+      details.appendChild(date);
 
-} else {
+      container.appendChild(img);
+      container.appendChild(title);
+      container.appendChild(details);
 
-  container.textContent = "المشروع غير موجود.";
+    } else {
 
-}
+      container.textContent = "المشروع غير موجود.";
 
-</script></body>
+    }
+
+  </script></body>
 </html>
