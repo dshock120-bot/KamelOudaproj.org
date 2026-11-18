@@ -13,7 +13,7 @@ const account = new Appwrite.Account(client);
 async function isLoggedIn() {
 try {
 const user = await account.get();
-return user.email.toLowerCase() === "teacher@gmail.com";
+return user.email.toLowerCase() === "haythammyname@gmail.com";
 } catch (error) {
 return false;
 }
