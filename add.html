@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 
 <title>إنشاء مشروع جديد</title>
 
@@ -14,6 +12,8 @@ body {
     background-color: #d9e8fa;
     font-family: Arial;
     text-align: center;
+    margin: 0;
+    padding: 15px;
 }
 
 .container {
@@ -39,7 +39,7 @@ input, select {
 button {
     background: #287A38;
     color: white;
-    width: 120px;
+    min-width: 120px;
     height: 42px;
     border: none;
     border-radius: 6px;
@@ -60,6 +60,12 @@ label {
     text-align: right;
     margin-top: 12px;
 }
+
+#message {
+    margin-top: 15px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script>
@@ -72,58 +78,54 @@ label {
 <h2>إنشاء مشروع جديد</h2>
 
 <label>اسم المشروع</label>
-<input id="projectName" placeholder="اسم المشروع">
+<input id="projectName" type="text" placeholder="اسم المشروع">
 
 <label>اسم المنشئ</label>
-<input id="creatorName" placeholder="اسم المنشئ">
+<input id="creatorName" type="text" placeholder="اسم المنشئ">
 
-<label>الفئة الرئيسية (المادة)</label>
+<label>المادة</label>
 <select id="category">
     <option value="">اختر المادة</option>
-    <option>لغة عربية</option>
-    <option>رياضيات</option>
-    <option>علوم</option>
-    <option>إنجليزي</option>
-    <option>قرآن كريم</option>
-    <option>دراسات اجتماعية</option>
-    <option>تربية فنية</option>
+    <option value="لغة عربية">لغة عربية</option>
+    <option value="رياضيات">رياضيات</option>
+    <option value="علوم">علوم</option>
+    <option value="إنجليزي">إنجليزي</option>
+    <option value="قرآن كريم">قرآن كريم</option>
+    <option value="دراسات اجتماعية">دراسات اجتماعية</option>
+    <option value="تربية فنية">تربية فنية</option>
 </select>
 
-<label>الفئة الفرعية (الصف الدراسي)</label>
+<label>الصف الدراسي</label>
 <select id="grade">
     <option value="">اختر الصف الدراسي</option>
 
     <optgroup label="المرحلة الابتدائية">
-        <option>الصف الأول الابتدائي</option>
-        <option>الصف الثاني الابتدائي</option>
-        <option>الصف الثالث الابتدائي</option>
-        <option>الصف الرابع الابتدائي</option>
-        <option>الصف الخامس الابتدائي</option>
-        <option>الصف السادس الابتدائي</option>
+        <option value="الصف الأول الابتدائي">الأول الابتدائي</option>
+        <option value="الصف الثاني الابتدائي">الثاني الابتدائي</option>
+        <option value="الصف الثالث الابتدائي">الثالث الابتدائي</option>
+        <option value="الصف الرابع الابتدائي">الرابع الابتدائي</option>
+        <option value="الصف الخامس الابتدائي">الخامس الابتدائي</option>
+        <option value="الصف السادس الابتدائي">السادس الابتدائي</option>
     </optgroup>
 
     <optgroup label="المرحلة الإعدادية">
-        <option>الصف الأول الإعدادي</option>
-        <option>الصف الثاني الإعدادي</option>
-        <option>الصف الثالث الإعدادي</option>
+        <option value="الصف الأول الإعدادي">الأول الإعدادي</option>
+        <option value="الصف الثاني الإعدادي">الثاني الإعدادي</option>
+        <option value="الصف الثالث الإعدادي">الثالث الإعدادي</option>
     </optgroup>
 
     <optgroup label="المرحلة الثانوية">
-        <option>الصف الأول الثانوي</option>
-        <option>الصف الثاني الثانوي</option>
-        <option>الصف الثالث الثانوي</option>
+        <option value="الصف الأول الثانوي">الأول الثانوي</option>
+        <option value="الصف الثاني الثانوي">الثاني الثانوي</option>
+        <option value="الصف الثالث الثانوي">الثالث الثانوي</option>
     </optgroup>
 </select>
 
-<label>تاريخ العمل</label>
+<label>تاريخ المشروع</label>
 <input type="date" id="workDate">
 
 <label>صورة المشروع</label>
-<input
-    type="file"
-    id="projectImage"
-    accept=".jpg,.jpeg,.png,image/jpeg,image/png"
->
+<input type="file" id="projectImage" accept="image/jpeg,image/png">
 
 <br><br>
 
@@ -135,9 +137,12 @@ label {
     رجوع
 </button>
 
+<p id="message"></p>
+
 </div>
 
-<script src="auth.js?v=20261118-4"></script>
+<script src="auth.js?v=20261118-5"></script>
+
 <script>
 
 // إعداد Appwrite
@@ -155,40 +160,62 @@ const DATABASE_ID = "6afdd419002061d1ceef";
 const TABLE_ID = "6afdd4610022a0ea1d6f";
 const BUCKET_ID = "6afdd6eb002b777e7c31";
 
+// رسالة الحالة
+function showMessage(message, success = false) {
+    const element = document.getElementById("message");
+    element.textContent = message;
+    element.style.color = success ? "green" : "red";
+}
+
 // إنشاء المشروع
 async function saveProject() {
 
     const button = document.getElementById("createButton");
 
-    if (!(await isLoggedIn())) {
-        alert("يجب تسجيل الدخول أولاً");
-        location.href = "login.html";
-        return;
-    }
-
-    const name = document.getElementById("projectName").value.trim();
-    const creator = document.getElementById("creatorName").value.trim();
-    const category = document.getElementById("category").value;
-    const grade = document.getElementById("grade").value;
-    const date = document.getElementById("workDate").value;
-    const image = document.getElementById("projectImage").files[0];
-
-    if (!name || !creator || !category || !grade || !date || !image) {
-        alert("من فضلك أكمل جميع البيانات");
-        return;
-    }
-
-    if (!["image/jpeg", "image/png"].includes(image.type)) {
-        alert("من فضلك اختر صورة JPG أو PNG فقط");
-        return;
-    }
-
-    button.disabled = true;
-    button.textContent = "جارٍ الحفظ...";
-
     let uploadedFile = null;
 
     try {
+
+        // التحقق من تسجيل الدخول
+        if (typeof isLoggedIn !== "function") {
+            throw new Error("لم يتم تحميل ملف auth.js بشكل صحيح");
+        }
+
+        const loggedIn = await isLoggedIn();
+
+        if (!loggedIn) {
+            alert("يجب تسجيل الدخول أولاً");
+            location.href = "login.html";
+            return;
+        }
+
+        // قراءة البيانات
+        const name = document.getElementById("projectName").value.trim();
+        const creator = document.getElementById("creatorName").value.trim();
+        const category = document.getElementById("category").value;
+        const grade = document.getElementById("grade").value;
+        const date = document.getElementById("workDate").value;
+        const image = document.getElementById("projectImage").files[0];
+
+        // التحقق من البيانات
+        if (!name || !creator || !category || !grade || !date || !image) {
+            showMessage("من فضلك أكمل جميع البيانات واختر صورة.");
+            return;
+        }
+
+        if (!["image/jpeg", "image/png"].includes(image.type)) {
+            showMessage("الصورة يجب أن تكون JPG أو PNG.");
+            return;
+        }
+
+        if (image.size > 10 * 1024 * 1024) {
+            showMessage("حجم الصورة أكبر من 10 ميجابايت.");
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = "جارٍ إنشاء المشروع...";
+        showMessage("جارٍ رفع الصورة وحفظ المشروع...", true);
 
         // رفع الصورة
         uploadedFile = await storage.createFile({
@@ -222,6 +249,10 @@ async function saveProject() {
             }
         });
 
+        showMessage("تم إنشاء المشروع بنجاح!", true);
+
+        button.textContent = "تم الإنشاء";
+
         alert("تم إنشاء المشروع بنجاح!");
 
         location.href = "list.html";
@@ -230,7 +261,7 @@ async function saveProject() {
 
         console.error("Appwrite Error:", error);
 
-        // حذف الصورة إذا فشل حفظ بيانات المشروع
+        // حذف الصورة إذا فشل حفظ المشروع
         if (uploadedFile) {
             try {
                 await storage.deleteFile({
@@ -238,12 +269,12 @@ async function saveProject() {
                     fileId: uploadedFile.$id
                 });
             } catch (deleteError) {
-                console.error(deleteError);
+                console.error("Image deletion error:", deleteError);
             }
         }
 
-        alert(
-            "حدث خطأ أثناء الحفظ: " +
+        showMessage(
+            "فشل إنشاء المشروع: " +
             (error.message || "خطأ غير معروف")
         );
 
