@@ -1,7 +1,8 @@
 <!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>تسجيل الدخول</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول</title><style>
 body {
     background: #d9e8fa;
     font-family: Arial;
@@ -36,6 +37,7 @@ input {
 }
 
 button {
+    display: block;
     width: 100%;
     padding: 13px;
     background: #287A38;
@@ -43,10 +45,16 @@ button {
     border: none;
     border-radius: 8px;
     font-size: 16px;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
 }
 
 #error {
     color: red;
+    font-size: 14px;
 }
 </style></head><body><div class="box"><h2>تسجيل الدخول</h2><p>أدخل بيانات حساب الأدمن للمتابعة</p><form id="loginForm"><input
 type="email"
@@ -67,7 +75,6 @@ required
 <button type="submit" id="loginButton">دخول</button>
 
 </form><p id="error"></p></div><script src="https://cdn.jsdelivr.net/npm/appwrite@29.0.0"></script><script>
-
 const client = new Appwrite.Client();
 
 client
@@ -80,7 +87,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
     e.preventDefault();
 
-    const email = document.getElementById("email").value.trim();
+    const email = document.getElementById("email").value.trim().toLowerCase();
     const password = document.getElementById("password").value;
 
     const error = document.getElementById("error");
@@ -88,7 +95,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
     error.textContent = "";
 
-    if (email.toLowerCase() !== "teacher@gmail.com") {
+    if (email !== "teacher@gmail.com") {
         error.textContent = "هذا البريد الإلكتروني غير مسموح له بالدخول.";
         return;
     }
@@ -117,6 +124,5 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     }
 
 });
-
 </script></body>
 </html>
